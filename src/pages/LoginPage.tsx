@@ -6,11 +6,44 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "@/components/ui/use-toast";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    // Simulate login process
+    setTimeout(() => {
+      setIsLoading(false);
+      toast({
+        title: "Login Successful",
+        description: "Welcome back to Meatify!",
+      });
+      navigate('/');
+    }, 1000);
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    // Simulate signup process
+    setTimeout(() => {
+      setIsLoading(false);
+      toast({
+        title: "Account Created",
+        description: "Welcome to Meatify! You can now start shopping.",
+      });
+      navigate('/');
+    }, 1000);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-orange-50 flex items-center justify-center p-4">
@@ -47,10 +80,10 @@ const LoginPage = () => {
                 <p className="text-gray-600 mt-2">Enter your credentials to access your account</p>
               </div>
 
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleLogin}>
                 <div>
                   <Label htmlFor="login-email">Email or Phone</Label>
-                  <Input id="login-email" type="text" placeholder="Enter email or phone number" />
+                  <Input id="login-email" type="text" placeholder="Enter email or phone number" required />
                 </div>
 
                 <div>
@@ -61,6 +94,7 @@ const LoginPage = () => {
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter password"
                       className="pr-10"
+                      required
                     />
                     <button
                       type="button"
@@ -88,12 +122,12 @@ const LoginPage = () => {
                   </button>
                 </div>
 
-                <Button type="submit" className="w-full">
-                  Login
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? "Logging in..." : "Login"}
                 </Button>
 
                 <div className="text-center">
-                  <Button variant="outline" className="w-full">
+                  <Button variant="outline" className="w-full" type="button">
                     Login with OTP
                   </Button>
                 </div>
@@ -133,26 +167,26 @@ const LoginPage = () => {
                 <p className="text-gray-600 mt-2">Join us for fresh meat delivery</p>
               </div>
 
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSignup}>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="firstName">First Name</Label>
-                    <Input id="firstName" placeholder="Enter first name" />
+                    <Input id="firstName" placeholder="Enter first name" required />
                   </div>
                   <div>
                     <Label htmlFor="lastName">Last Name</Label>
-                    <Input id="lastName" placeholder="Enter last name" />
+                    <Input id="lastName" placeholder="Enter last name" required />
                   </div>
                 </div>
 
                 <div>
                   <Label htmlFor="signup-email">Email</Label>
-                  <Input id="signup-email" type="email" placeholder="Enter email address" />
+                  <Input id="signup-email" type="email" placeholder="Enter email address" required />
                 </div>
 
                 <div>
                   <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" type="tel" placeholder="Enter phone number" />
+                  <Input id="phone" type="tel" placeholder="Enter phone number" required />
                 </div>
 
                 <div>
@@ -163,6 +197,7 @@ const LoginPage = () => {
                       type={showPassword ? "text" : "password"}
                       placeholder="Create password"
                       className="pr-10"
+                      required
                     />
                     <button
                       type="button"
@@ -186,6 +221,7 @@ const LoginPage = () => {
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Confirm password"
                       className="pr-10"
+                      required
                     />
                     <button
                       type="button"
@@ -202,7 +238,7 @@ const LoginPage = () => {
                 </div>
 
                 <div className="flex items-center space-x-2">
-                  <input type="checkbox" id="terms" className="rounded" />
+                  <input type="checkbox" id="terms" className="rounded" required />
                   <label htmlFor="terms" className="text-sm text-gray-600">
                     I agree to the{" "}
                     <button type="button" className="text-primary hover:underline">
@@ -211,8 +247,8 @@ const LoginPage = () => {
                   </label>
                 </div>
 
-                <Button type="submit" className="w-full">
-                  Create Account
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? "Creating Account..." : "Create Account"}
                 </Button>
               </form>
             </TabsContent>
